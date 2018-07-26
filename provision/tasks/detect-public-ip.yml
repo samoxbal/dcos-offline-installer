@@ -1,0 +1,6 @@
+---
+- name: Set Public Network Interface
+  set_fact: public_iface=enp0s8
+
+- name: Detect Public IP
+  set_fact: public_ip={{ hostvars[inventory_hostname]['ansible_' + public_iface]['ipv4']['address'] }}

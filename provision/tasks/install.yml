@@ -1,0 +1,6 @@
+---
+- name: Download DC/OS Node Installer
+  get_url: url=http://boot.dcos/dcos_install.sh dest=/tmp/dcos_install.sh mode=0755
+
+- name: Install DC/OS Node
+  command: creates="/opt/mesosphere" /tmp/dcos_install.sh {{ node_type }}

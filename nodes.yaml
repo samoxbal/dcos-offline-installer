@@ -1,0 +1,16 @@
+master:
+  ip: 192.168.65.90
+  cpus: 2
+  memory: 1024
+  type: master
+public:
+  ip: 192.168.65.60
+  cpus: 2
+  memory: 1024
+  memory-reserved: 512
+  type: agent-public
+boot:
+  ip: 192.168.65.50
+  cpus: 2
+  memory: 1024
+  type: boot
