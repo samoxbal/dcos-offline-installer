@@ -11,6 +11,7 @@
     file: src=/etc/ssl/certs/ca-bundle.crt dest=/etc/ssl/certs/ca-certificates.crt state=link
   - include: tasks/detect-public-ip.yml
   - include: tasks/insecure-registry.yml
+  - include: tasks/enable-ntp.yml
 
 - name: Generate DC/OS Node Installer
   hosts: boot

@@ -20,9 +20,8 @@ class UserConfig
 
   def self.from_env
     c = new
-    c.box                  = ENV.fetch('DCOS_BOX', 'mesosphere/dcos-centos-virtualbox')
-    c.box_url              = ENV.fetch('DCOS_BOX_URL', 'https://downloads.dcos.io/dcos-vagrant/metadata.json')
-    c.box_version          = ENV.fetch('DCOS_BOX_VERSION', '~> 0.9.0')
+    c.box                  = ENV.fetch('DCOS_BOX', 'dcos-centos-virtualbox')
+    c.box_url              = ENV.fetch('DCOS_BOX_URL', 'http://mvn/artifactory/vagrant/dcos-centos-virtualbox-1708.box')
     c.machine_config_path  = ENV.fetch('DCOS_MACHINE_CONFIG_PATH', 'nodes.yaml')
     c.generate_config_path = ENV.fetch('DCOS_GENERATE_CONFIG_PATH', 'https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh')
     c.install_method       = ENV.fetch('DCOS_INSTALL_METHOD', 'ssh_pull')
@@ -39,7 +38,6 @@ class UserConfig
     required_fields = [
       :box,
       :box_url,
-      :box_version,
       :machine_config_path,
       :generate_config_path,
       :install_method,
@@ -215,7 +213,6 @@ Vagrant.configure(2) do |config|
       # allow explicit nil values in the machine_type to override the defaults
       machine.vm.box = machine_type.fetch('box', user_config.box)
       machine.vm.box_url = machine_type.fetch('box-url', user_config.box_url)
-      machine.vm.box_version = machine_type.fetch('box-version', user_config.box_version)
 
       machine.vm.provider 'virtualbox' do |v, override|
         v.name = machine.vm.hostname
@@ -262,7 +259,8 @@ Vagrant.configure(2) do |config|
           ansible.limit = 'all'
           ansible.playbook = 'provision/playbook.yml'
           ansible.raw_arguments  = [
-            '--private-key=/vagrant/.vagrant/dcos/private_key_vagrant'
+            '--private-key=/vagrant/.vagrant/dcos/private_key_vagrant',
+            '-vvvv'
           ]
           ansible.groups = ansible_groups
           ansible.host_vars = ansible_host_vars

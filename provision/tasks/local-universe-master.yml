@@ -1,0 +1,29 @@
+---
+- name: Create temporary directory for dcos-local-universe
+  file:
+    path: /tmp/dcos-local-universe
+    state: directory
+
+- name: Fetch the Universe tar archive
+  get_url:
+    url: https://downloads.mesosphere.com/universe/public/local-universe.tar.gz
+    dest: /tmp/dcos-local-universe/local-universe.tar.gz
+
+- name: Fetch the Universe HTTP systemd file
+  get_url:
+    url: https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-http.service
+    dest: /etc/systemd/system/dcos-local-universe-http.service
+
+- name: Fetch the Universe HTTP registry file
+  get_url:
+    url: https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-registry.service
+    dest: /etc/systemd/system/dcos-local-universe-registry.service
+
+- name: Load container
+  command: docker load -i "/tmp/dcos-local-universe/local-universe.tar.gz"
+
+- name: Enable and start http service
+  systemd: name=dcos-local-universe-http state=started enabled=yes daemon_reload=yes
+
+- name: Enable and start registry service
+  service: name=dcos-local-universe-registry state=started enabled=yes daemon_reload=yes

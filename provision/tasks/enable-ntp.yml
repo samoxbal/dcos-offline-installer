@@ -1,0 +1,22 @@
+- name: Install NTP packages
+  yum: >
+    name={{item}}
+    state=present
+  with_items:
+  - ntp
+  - ntpdate
+
+#- name: Config NTP servers
+#  template: src=templates/ntp.conf.j2 dest=/etc/ntp.conf
+
+- name: Start NTP
+  command: systemctl start ntpd
+
+- name: Enable NTP
+  command: systemctl enable ntpd
+
+- name: Set timedate NTP
+  command: timedatectl set-ntp true
+
+- name: Set local RTC
+  command: timedatectl set-local-rtc yes

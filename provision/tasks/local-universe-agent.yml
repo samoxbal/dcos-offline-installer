@@ -1,0 +1,9 @@
+---
+- name: Create folder for docker certificate
+  file: name=/etc/docker/certs.d/master.mesos:5000 state=directory mode=0755
+
+- name: Download certificate
+  get_url: url=http://master.mesos:8082/certs/domain.crt dest=/etc/docker/certs.d/master.mesos:5000/ca.crt
+
+- name: Enable and start registry service
+  service: name=docker state=restarted
