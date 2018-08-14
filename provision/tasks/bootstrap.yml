@@ -30,7 +30,11 @@
   file: path=~/dcos/genconf state=directory
 
 - name: Download DC/OS Installer
-  get_url: url={{ DCOS_GENERATE_CONFIG_PATH }} dest=~/dcos/dcos_generate_config.sh mode=0755
+  get_url:
+    url: http://mvn/artifactory/devops_tools_binary/dcos/dcos_generate_config.sh
+    dest: ~/dcos/dcos_generate_config.sh
+    mode: 0755
+    validate_certs: no
 
 - name: Lookup Headnode Public IP
   set_fact: headnode_ip={{ hostvars[groups['master'][0]]['public_ip'] }}

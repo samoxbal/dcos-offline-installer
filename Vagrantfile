@@ -11,9 +11,7 @@ require 'yaml'
 class UserConfig
   attr_accessor :box
   attr_accessor :box_url
-  attr_accessor :box_version
   attr_accessor :machine_config_path
-  attr_accessor :generate_config_path
   attr_accessor :install_method
   attr_accessor :vagrant_mount_method
   attr_accessor :private_registry
@@ -23,7 +21,6 @@ class UserConfig
     c.box                  = ENV.fetch('DCOS_BOX', 'dcos-centos-virtualbox')
     c.box_url              = ENV.fetch('DCOS_BOX_URL', 'http://mvn/artifactory/vagrant/dcos-centos-virtualbox-1708.box')
     c.machine_config_path  = ENV.fetch('DCOS_MACHINE_CONFIG_PATH', 'nodes.yaml')
-    c.generate_config_path = ENV.fetch('DCOS_GENERATE_CONFIG_PATH', 'https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh')
     c.install_method       = ENV.fetch('DCOS_INSTALL_METHOD', 'ssh_pull')
     c.vagrant_mount_method = ENV.fetch('DCOS_VAGRANT_MOUNT_METHOD', 'virtualbox')
     c.private_registry     = (ENV.fetch('DCOS_PRIVATE_REGISTRY', 'false') == 'true')
@@ -39,7 +36,6 @@ class UserConfig
       :box,
       :box_url,
       :machine_config_path,
-      :generate_config_path,
       :install_method,
       :vagrant_mount_method
     ]
@@ -69,7 +65,6 @@ class UserConfig
   # create environment for provisioning scripts
   def provision_env(machine_type)
     env = {
-      'DCOS_GENERATE_CONFIG_PATH' => @generate_config_path,
       'DCOS_PRIVATE_REGISTRY' => @private_registry ? 'true' : 'false'
     }
     if machine_type['memory-reserved']
